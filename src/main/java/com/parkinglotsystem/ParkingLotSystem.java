@@ -1,5 +1,7 @@
 package com.parkinglotsystem;
 
+import com.parkinglotsystem.exception.ParkingLotSystemException;
+
 public class ParkingLotSystem {
     private Object vehicle;
 
@@ -10,6 +12,6 @@ public class ParkingLotSystem {
     public boolean isVehicleParked(Object vehicle) {
         if(this.vehicle == vehicle)
             return true;
-        return false;
+        throw new ParkingLotSystemException("Vehicle Is Not Available", ParkingLotSystemException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 }
