@@ -17,19 +17,26 @@ public class ParkingLotSystemTest {
     }
 
     @Test
-    public void givenVehicle_WhenParked_ShouldReturnTrue() {
-        ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
+    public void givenVehicleToPark_WhenParked_ShouldReturnTrue() {
         parkingLotSystem.parkVehicle(vehicle);
         boolean isParked = parkingLotSystem.isVehicleParked(vehicle);
         Assert.assertTrue(isParked);
     }
 
     @Test
-    public void givenVehicle_WhenNotParked_ShouldReturnFalse() {
+    public void givenVehicleToPark_WhenNotParked_ShouldReturnException() {
         try {
-            parkingLotSystem.isVehicleParked(vehicle);
+            parkingLotSystem.parkVehicle(vehicle);
+            parkingLotSystem.isVehicleParked(new Object());
         } catch(ParkingLotSystemException e) {
             Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
         }
+    }
+
+    @Test
+    public void givenVehicleToUnpark_WhenParked_ShouldReturnTrue() {
+        parkingLotSystem.parkVehicle(vehicle);
+        boolean unparkVehicle = parkingLotSystem.unparkVehicle(vehicle);
+        Assert.assertTrue(unparkVehicle);
     }
 }
