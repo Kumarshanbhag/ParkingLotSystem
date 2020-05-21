@@ -39,4 +39,14 @@ public class ParkingLotSystemTest {
         boolean unparkVehicle = parkingLotSystem.unparkVehicle(vehicle);
         Assert.assertTrue(unparkVehicle);
     }
+
+    @Test
+    public void givenVehicleToUnpark_WhenNotParked_ShouldReturnException() {
+        parkingLotSystem.parkVehicle(vehicle);
+        try {
+            parkingLotSystem.unparkVehicle(new Object());
+        } catch(ParkingLotSystemException e) {
+            Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
+        }
+    }
 }
