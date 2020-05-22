@@ -1,9 +1,9 @@
 package com.parkinglotsystem.test;
 
-import com.parkinglotsystem.AirportSecurity;
+import com.parkinglotsystem.model.AirportSecurity;
 import com.parkinglotsystem.ParkingLotSystem;
-import com.parkinglotsystem.ParkingOwner;
 import com.parkinglotsystem.exception.ParkingLotSystemException;
+import com.parkinglotsystem.model.ParkingOwner;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,27 +53,72 @@ public class ParkingLotSystemTest {
     }
 
     @Test
-    public void givenVehicle_WhenParkingFull_ShouldInformOwner() {
+    public void givenVehicle_WhenParkingFullAndOwnerIsObserver_ShouldInformOwner() {
         ParkingOwner parkingOwner = new ParkingOwner();
         try {
-            parkingLotSystem.registerParkingLotSystemObserver(parkingOwner);
+            parkingLotSystem.subscribe(parkingOwner);
             parkingLotSystem.parkVehicle(new Object());
             parkingLotSystem.parkVehicle(vehicle);
         } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Parking Is Full", e.getMessage());
             Assert.assertTrue(parkingOwner.isParkingFull());
         }
     }
 
     @Test
-    public void givenVehicle_WhenParkingFull_ShouldInformToAirportSecurity() {
+    public void givenVehicle_WhenParkingFullAndOwnerIsNotObserver_ShouldInformOwner() {
+        ParkingOwner parkingOwner = new ParkingOwner();
+        try {
+            parkingLotSystem.subscribe(parkingOwner);
+            parkingLotSystem.unsubscribe(parkingOwner);
+            parkingLotSystem.parkVehicle(new Object());
+            parkingLotSystem.parkVehicle(vehicle);
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Parking Is Full", e.getMessage());
+            Assert.assertFalse(parkingOwner.isParkingFull());
+        }
+    }
+
+    @Test
+    public void givenVehicle_WhenParkingFullAndAirportSecurityIsObserver_ShouldInformAirportSecurity() {
         AirportSecurity airportSecurity = new AirportSecurity();
         try {
-            parkingLotSystem.registerParkingLotSystemObserver(airportSecurity);
+            parkingLotSystem.subscribe(airportSecurity);
             parkingLotSystem.parkVehicle(vehicle);
             parkingLotSystem.parkVehicle(new Object());
         } catch (ParkingLotSystemException e) {
-            boolean parkingFull = airportSecurity.isParkingFull();
-            Assert.assertTrue(parkingFull);
+            Assert.assertEquals("Parking Is Full", e.getMessage());
+            Assert.assertTrue(airportSecurity.isParkingFull());
+        }
+    }
+
+    @Test
+    public void givenVehicle_WhenParkingFullAndAirportSecurityIsNotObserver_ShouldInformAirportSecurity() {
+        AirportSecurity airportSecurity = new AirportSecurity();
+        try {
+            parkingLotSystem.subscribe(airportSecurity);
+            parkingLotSystem.unsubscribe(airportSecurity);
+            parkingLotSystem.parkVehicle(vehicle);
+            parkingLotSystem.parkVehicle(new Object());
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Parking Is Full", e.getMessage());
+            Assert.assertFalse(airportSecurity.isParkingFull());
+        }
+    }
+
+    @Test
+    public void givenVehicle_WhenParkingFullAndParkingOwnerAndAirportSecurityAreObserver_ShouldInformBothParkingOwnerAndAirportSecurity() {
+        ParkingOwner parkingOwner = new ParkingOwner();
+        AirportSecurity airportSecurity = new AirportSecurity();
+        try {
+            parkingLotSystem.subscribe(parkingOwner);
+            parkingLotSystem.subscribe(airportSecurity);
+            parkingLotSystem.parkVehicle(vehicle);
+            parkingLotSystem.parkVehicle(new Object());
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Parking Is Full", e.getMessage());
+            Assert.assertTrue(parkingOwner.isParkingFull());
+            Assert.assertTrue(airportSecurity.isParkingFull());
         }
     }
 }

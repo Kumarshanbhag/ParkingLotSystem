@@ -7,28 +7,27 @@
 package com.parkinglotsystem;
 
 import com.parkinglotsystem.exception.ParkingLotSystemException;
-
-import java.util.ArrayList;
+import com.parkinglotsystem.observer.InformObserver;
+import com.parkinglotsystem.observer.ParkingLotSubscriber;
 
 public class ParkingLotSystem {
     private int parkingCapacity;
     private Object vehicle;
     private int currentCapacity = 0;
-    private ArrayList<ParkingLotSystemObserver> parkingLotSystemObservers;
+    InformObserver informObserver;
 
     public ParkingLotSystem(int parkingCapacity) {
         this.parkingCapacity = parkingCapacity;
-        this.parkingLotSystemObservers = new ArrayList<ParkingLotSystemObserver>();
+        this.informObserver = new InformObserver();
     }
 
-    /**
+    /*
      * Purpose: To Park Vehicle in ParkingLot And Inform Parking Full
      * @param vehicle To Park in ParkingLot
      */
     public void parkVehicle(Object vehicle) {
         if (this.parkingCapacity == currentCapacity) {
-            for(ParkingLotSystemObserver parkingLotSystemObserver : parkingLotSystemObservers)
-            parkingLotSystemObserver.parkingFull();
+            informObserver.parkingFull();
             throw new ParkingLotSystemException("Parking Is Full", ParkingLotSystemException.ExceptionType.PARKING_FULL);
         }
         this.vehicle = vehicle;
@@ -36,9 +35,9 @@ public class ParkingLotSystem {
     }
 
     /**
-     * Purpose: To Check If Vehivle Parked
+     * Purpose: To Check If Vehicle Parked
      * @param vehicle is Parked Or Not
-     * @return true if Vehivle Parked Or throw Exception
+     * @return true if Vehivle Parked Or Throw Exception
      */
     public boolean isVehicleParked(Object vehicle) {
         if (this.vehicle.equals(vehicle))
@@ -58,10 +57,18 @@ public class ParkingLotSystem {
     }
 
     /**
-     * Purpose: Add Observer Like Owner and Security In List
-     * @param observer To Add in the List
+     *Purpose: Add Subscriber
+     * @param subscriber
      */
-    public void registerParkingLotSystemObserver(ParkingLotSystemObserver observer) {
-        this.parkingLotSystemObservers.add(observer);
+    public void subscribe(ParkingLotSubscriber subscriber) {
+        informObserver.subscribeParkingLotObserver(subscriber);
+    }
+
+    /**
+     *Purpose: Remove Subscriber
+     * @param subscriber
+     */
+    public void unsubscribe(ParkingLotSubscriber subscriber) {
+        informObserver.unsubscribeParkingLotObserver(subscriber);
     }
 }

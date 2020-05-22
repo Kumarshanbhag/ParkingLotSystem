@@ -5,9 +5,9 @@
  ****************************************************************/
 package com.parkinglotsystem.model;
 
-import com.parkinglotsystem.ParkingLotSystemObserver;
+import com.parkinglotsystem.observer.ParkingLotSubscriber;
 
-public class AirportSecurity implements ParkingLotSystemObserver {
+public class AirportSecurity implements ParkingLotSubscriber {
 
     private boolean parkingCapacity;
 
@@ -15,15 +15,14 @@ public class AirportSecurity implements ParkingLotSystemObserver {
      * Purpose: To change Parking Capacity To True If Parking Is Full
      */
     @Override
-    public void parkingFull() {
-        this.parkingCapacity = true;
+    public void parkingFull(boolean parkingCapacity) {
+        this.parkingCapacity = parkingCapacity;
     }
 
     /**
      * Purpose: To Return Parking Capacity
      * @return true if parkingFull Or False
      */
-    @Override
     public boolean isParkingFull() {
         return this.parkingCapacity;
     }

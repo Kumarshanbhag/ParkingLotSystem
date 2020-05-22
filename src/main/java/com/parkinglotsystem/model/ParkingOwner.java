@@ -5,16 +5,17 @@
  ****************************************************************/
 package com.parkinglotsystem.model;
 
-import com.parkinglotsystem.ParkingLotSystemObserver;
+import com.parkinglotsystem.observer.ParkingLotSubscriber;
 
-public class ParkingOwner implements ParkingLotSystemObserver {
+public class ParkingOwner implements ParkingLotSubscriber {
     private boolean parkingCapacity;
 
     /**
      * Purpose: To change Parking Capacity To True If Parking Is Full
      */
-    public void parkingFull() {
-        this.parkingCapacity = true;
+    @Override
+    public void parkingFull(boolean parkingCapacity) {
+        this.parkingCapacity = parkingCapacity;
     }
 
     /**
