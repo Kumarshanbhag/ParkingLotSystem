@@ -23,6 +23,7 @@ public class AirportSecurity implements ParkingLotSubscriber {
      * Purpose: To Return Parking Capacity
      * @return true if parkingFull Or False
      */
+    @Override
     public boolean isParkingFull() {
         return this.parkingCapacity;
     }

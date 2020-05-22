@@ -41,11 +41,18 @@ public class InformObserver {
     }
 
     /**
+     * Purpose: To Set Parking Capacity To False If Parking Full
+     */
+    public void parkingAvailable() {
+        this.parkingCapacity = false;
+        isParkingFull();
+    }
+
+    /**
      * Purpose: To Inform Subscribers When Parking Is Full
      */
     public void isParkingFull() {
         for(ParkingLotSubscriber parkingLotSubscriber : observersList)
             parkingLotSubscriber.parkingFull(this.parkingCapacity);
     }
-
 }

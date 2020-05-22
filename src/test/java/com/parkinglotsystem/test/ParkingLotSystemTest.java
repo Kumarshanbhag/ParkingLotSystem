@@ -121,4 +121,19 @@ public class ParkingLotSystemTest {
             Assert.assertTrue(airportSecurity.isParkingFull());
         }
     }
+
+    @Test
+    public void givenVehicle_WhenParkingavailableAndOwnerIsObserver_ShouldInformOwner() {
+        ParkingOwner parkingOwner = new ParkingOwner();
+        try {
+            parkingLotSystem.subscribe(parkingOwner);
+            parkingLotSystem.parkVehicle(vehicle);
+            parkingLotSystem.parkVehicle(new Object());
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Parking Is Full", e.getMessage());
+            Assert.assertTrue(parkingOwner.isParkingFull());
+        }
+        parkingLotSystem.unparkVehicle(vehicle);
+        Assert.assertFalse(parkingOwner.isParkingFull());
+    }
 }
