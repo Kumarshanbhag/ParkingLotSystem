@@ -9,6 +9,7 @@ import com.parkinglotsystem.observer.ParkingLotSubscriber;
 
 public class ParkingOwner implements ParkingLotSubscriber {
     private boolean parkingCapacity;
+    private int parkingTime;
 
     /**
      * Purpose: To change Parking Capacity To True If Parking Is Full
@@ -22,7 +23,26 @@ public class ParkingOwner implements ParkingLotSubscriber {
      * Purpose: To Return Parking Capacity
      * @return true if parkingFull Or False
      */
+    @Override
     public boolean isParkingFull() {
         return this.parkingCapacity;
+    }
+
+    /**
+     * Purpose: To set ParkingTime For Vehicle
+     * @param parkingTime Time In Minutes
+     */
+    @Override
+    public void parkingTime(int parkingTime) {
+        this.parkingTime = parkingTime;
+    }
+
+    /**
+     * Purpose: To Return Parking Time
+     * @return parkingTime
+     */
+    @Override
+    public int getParkingTime() {
+        return parkingTime;
     }
 }

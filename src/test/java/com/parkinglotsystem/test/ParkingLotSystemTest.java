@@ -33,12 +33,9 @@ public class ParkingLotSystemTest {
 
     @Test
     public void givenVehicleToPark_WhenNotParked_ShouldReturnException() {
-        try {
-            parkingLotSystem.parkVehicle(vehicle, listOfEmptyParkingSlots.get(0));
-            parkingLotSystem.isVehicleParked(new Object());
-        } catch (ParkingLotSystemException e) {
-            Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
-        }
+        parkingLotSystem.parkVehicle(vehicle, listOfEmptyParkingSlots.get(0));
+        boolean isParked = parkingLotSystem.isVehicleParked(new Object());
+        Assert.assertFalse(isParked);
     }
 
     @Test
@@ -242,4 +239,85 @@ public class ParkingLotSystemTest {
         }
     }
 
+    //UC8
+    @Test
+    public void givenParkingLot_WhenVehicleParkedAndOwnerIsObserver_ShouldInformParkingTimeToOwner() {
+        ParkingOwner parkingOwner = new ParkingOwner();
+        parkingLotSystem.subscribe(parkingOwner);
+        parkingLotSystem.setCapacity(10);
+        listOfEmptyParkingSlots = parkingLotSystem.getListOfEmptyParkingSlots();
+        parkingLotSystem.parkVehicle(vehicle, listOfEmptyParkingSlots.get(0));
+        parkingLotSystem.getVehicleParkingTime(vehicle);
+        int parkingTime = parkingOwner.getParkingTime();
+        Assert.assertEquals(0, parkingTime);
+    }
+
+    @Test
+    public void givenParkingLot_WhenVehicleNotParkedAndOwnerIsOberver_ShouldReturnException() {
+        ParkingOwner parkingOwner = new ParkingOwner();
+        parkingLotSystem.subscribe(parkingOwner);
+        parkingLotSystem.setCapacity(10);
+        listOfEmptyParkingSlots = parkingLotSystem.getListOfEmptyParkingSlots();
+        try {
+            parkingLotSystem.parkVehicle(vehicle, listOfEmptyParkingSlots.get(0));
+            parkingLotSystem.getVehicleParkingTime(new Object());
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenVehicleParkedAndAirportSecurityIsObserver_ShouldInformParkingTimeToAirportSecurity() {
+        AirportSecurity airportSecurity = new AirportSecurity();
+        parkingLotSystem.subscribe(airportSecurity);
+        parkingLotSystem.setCapacity(10);
+        listOfEmptyParkingSlots = parkingLotSystem.getListOfEmptyParkingSlots();
+        parkingLotSystem.parkVehicle(vehicle, listOfEmptyParkingSlots.get(0));
+        parkingLotSystem.getVehicleParkingTime(vehicle);
+        int parkingTime = airportSecurity.getParkingTime();
+        Assert.assertEquals(0, parkingTime);
+    }
+
+    @Test
+    public void givenParkingLot_WhenVehicleNotParkedAndAirportSecurityIsObserver_ShouldReturnException() {
+        AirportSecurity airportSecurity = new AirportSecurity();
+        parkingLotSystem.subscribe(airportSecurity);
+        parkingLotSystem.setCapacity(10);
+        listOfEmptyParkingSlots = parkingLotSystem.getListOfEmptyParkingSlots();
+        try {
+            parkingLotSystem.parkVehicle(vehicle, listOfEmptyParkingSlots.get(0));
+            parkingLotSystem.getVehicleParkingTime(new Object());
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenVehicleParkedAndOwnerAndAirportSecurityIsObserver_ShouldInformParkingTimeToBothOwnerAndAirportSecurity() {
+        ParkingOwner parkingOwner = new ParkingOwner();
+        AirportSecurity airportSecurity = new AirportSecurity();
+        parkingLotSystem.subscribe(airportSecurity);
+        parkingLotSystem.setCapacity(10);
+        listOfEmptyParkingSlots = parkingLotSystem.getListOfEmptyParkingSlots();
+        parkingLotSystem.parkVehicle(vehicle, listOfEmptyParkingSlots.get(0));
+        parkingLotSystem.getVehicleParkingTime(vehicle);
+        int parkingTime1 = parkingOwner.getParkingTime();
+        int parkingTime2 = airportSecurity.getParkingTime();
+        Assert.assertEquals(0, parkingTime1);
+        Assert.assertEquals(0, parkingTime2);
+    }
+
+    @Test
+    public void givenParkingLot_WhenVehicleNotParkedAndOwnerAndAirportSecurityIsObserver_ShouldReturnException() {
+        AirportSecurity airportSecurity = new AirportSecurity();
+        parkingLotSystem.subscribe(airportSecurity);
+        parkingLotSystem.setCapacity(10);
+        listOfEmptyParkingSlots = parkingLotSystem.getListOfEmptyParkingSlots();
+        try {
+            parkingLotSystem.parkVehicle(vehicle, listOfEmptyParkingSlots.get(0));
+            parkingLotSystem.getVehicleParkingTime(new Object());
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
+        }
+    }
 }

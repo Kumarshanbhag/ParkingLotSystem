@@ -7,17 +7,21 @@ package com.parkinglotsystem.observer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class InformObserver {
-    public List<ParkingLotSubscriber> observersList;
+    private List<ParkingLotSubscriber> observersList;
     private boolean parkingCapacity;
+    private int time;
 
     public InformObserver() {
         this.observersList = new ArrayList<>();
     }
 
-    /**+
+    /**
+     * +
      * Purpose : Add subscribers To The List
+     *
      * @param parkingLotSubscriber
      */
     public void subscribeParkingLotObserver(ParkingLotSubscriber parkingLotSubscriber) {
@@ -26,6 +30,7 @@ public class InformObserver {
 
     /**
      * Purpose: Remove Subscriber From The List
+     *
      * @param parkingLotSubscriber
      */
     public void unsubscribeParkingLotObserver(ParkingLotSubscriber parkingLotSubscriber) {
@@ -52,7 +57,17 @@ public class InformObserver {
      * Purpose: To Inform Subscribers When Parking Is Full
      */
     public void isParkingFull() {
-        for(ParkingLotSubscriber parkingLotSubscriber : observersList)
+        for (ParkingLotSubscriber parkingLotSubscriber : observersList)
             parkingLotSubscriber.parkingFull(this.parkingCapacity);
+    }
+
+    /**
+     * Purpose: To Inform Subscribers About Parking Time
+     * @param parkingTime To Inform Subscribers
+     */
+    public void setParkingTime(int parkingTime) {
+        this.time = (int) TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()) - parkingTime;
+        for (ParkingLotSubscriber parkingLotSubscriber : observersList)
+            parkingLotSubscriber.parkingTime(time);
     }
 }
