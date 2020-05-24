@@ -16,7 +16,6 @@ import java.util.List;
 public class ParkingLotSystem {
     private int parkingCapacity;
     private List vehicle;
-    private int currentCapacity = 0;
     InformObserver informObserver;
 
     public ParkingLotSystem(int parkingCapacity) {
@@ -25,21 +24,35 @@ public class ParkingLotSystem {
         this.informObserver = new InformObserver();
     }
 
+    /**
+     * Purpose:To Set The Parking Capacity Of The Parking Lot
+     *
+     * @param parkingCapacity Is The New Parking Capacity Of Parking Lot
+     */
+    public void setCapacity(int parkingCapacity) {
+        this.parkingCapacity = parkingCapacity;
+    }
+
     /*
      * Purpose: To Park Vehicle in ParkingLot And Inform Parking Full
      * @param vehicle To Park in ParkingLot
      */
     public void parkVehicle(Object vehicle) {
-        if (this.parkingCapacity == currentCapacity) {
-            informObserver.parkingFull();
+        if (this.parkingCapacity == this.vehicle.size()) {
             throw new ParkingLotSystemException("Parking Is Full", ParkingLotSystemException.ExceptionType.PARKING_FULL);
         }
+        if (this.vehicle.contains(vehicle)) {
+            throw new ParkingLotSystemException("Vehicle Already Parked", ParkingLotSystemException.ExceptionType.VEHICLE_ALREADY_PARKED);
+        }
         this.vehicle.add(vehicle);
-        currentCapacity++;
+        if (this.parkingCapacity == this.vehicle.size()) {
+            informObserver.parkingFull();
+        }
     }
 
     /**
      * Purpose: To Check If Vehicle Parked
+     *
      * @param vehicle is Parked Or Not
      * @return true if Vehivle Parked Or Throw Exception
      */
@@ -51,6 +64,7 @@ public class ParkingLotSystem {
 
     /**
      * Purpose: To Unpark Parked Vehicle
+     *
      * @param vehicle To Unpark From ParkingLot
      * @return true if Vehicle Unparked Or Throw Exception
      */
@@ -64,7 +78,8 @@ public class ParkingLotSystem {
     }
 
     /**
-     *Purpose: Add Subscriber
+     * Purpose: Add Subscriber
+     *
      * @param subscriber
      */
     public void subscribe(ParkingLotSubscriber subscriber) {
@@ -72,7 +87,8 @@ public class ParkingLotSystem {
     }
 
     /**
-     *Purpose: Remove Subscriber
+     * Purpose: Remove Subscriber
+     *
      * @param subscriber
      */
     public void unsubscribe(ParkingLotSubscriber subscriber) {
