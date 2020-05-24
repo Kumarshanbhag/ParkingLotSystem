@@ -220,4 +220,26 @@ public class ParkingLotSystemTest {
         listOfEmptyParkingSlots = parkingLotSystem.getListOfEmptyParkingSlots();
         Assert.assertEquals(expectedList, listOfEmptyParkingSlots);
     }
+
+    //UC7
+    @Test
+    public void givenParkingLotSystem_WhenVehicleFound_ShouldReturnVehicleSlot() {
+        parkingLotSystem.setCapacity(10);
+        listOfEmptyParkingSlots = parkingLotSystem.getListOfEmptyParkingSlots();
+        parkingLotSystem.parkVehicle(vehicle, listOfEmptyParkingSlots.get(0));
+        int slotNumber = parkingLotSystem.findVehicle(vehicle);
+        Assert.assertEquals(0, slotNumber);
+    }
+
+    @Test
+    public void givenParkingLotSystem_WhenVehicleNotFound_ShouldReturnException() {
+        parkingLotSystem.setCapacity(10);
+        listOfEmptyParkingSlots = parkingLotSystem.getListOfEmptyParkingSlots();
+        try {
+            parkingLotSystem.findVehicle(vehicle);
+        } catch (ParkingLotSystemException e) {
+            Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
+        }
+    }
+
 }
