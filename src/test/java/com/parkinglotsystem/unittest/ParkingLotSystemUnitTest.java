@@ -2,14 +2,13 @@ package com.parkinglotsystem.unittest;
 
 import com.parkinglotsystem.ParkingLot;
 import com.parkinglotsystem.ParkingLotSystem;
+import com.parkinglotsystem.enums.DriverType;
 import com.parkinglotsystem.exception.ParkingLotSystemException;
 import com.parkinglotsystem.model.AirportSecurity;
 import com.parkinglotsystem.model.ParkingOwner;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -43,7 +42,7 @@ public class ParkingLotSystemUnitTest {
 
     @Test
     public void givenVehicle_WhenParked_ShouldReturnTrue() {
-        parkingLotSystem.parkVehicle(vehicle);
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL);
         when((parkingLot).isVehicleParked(vehicle)).thenReturn(true);
         boolean isVehicleParked = parkingLotSystem.isVehicleParked(vehicle);
         Assert.assertTrue(isVehicleParked);
@@ -52,7 +51,7 @@ public class ParkingLotSystemUnitTest {
     @Test
     public void givenVehicleToPark_WhenAlreadyParked_ShouldReturnException() {
         try {
-            parkingLotSystem.parkVehicle(vehicle);
+            parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL);
             when((parkingLot).isVehicleParked(vehicle)).thenThrow(new ParkingLotSystemException("Vehicle Already Parked", ParkingLotSystemException.ExceptionType.VEHICLE_ALREADY_PARKED));
         } catch (ParkingLotSystemException e) {
             Assert.assertEquals("Vehicle Already Parked", e.getMessage());
@@ -62,7 +61,7 @@ public class ParkingLotSystemUnitTest {
     @Test
     public void givenVehicle_WhenParked_ShouldReturnFalse() {
         try {
-            parkingLotSystem.parkVehicle(vehicle);
+            parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL);
             when((parkingLot).isVehicleParked(vehicle)).thenReturn(false);
             parkingLotSystem.isVehicleParked(vehicle);
         } catch (ParkingLotSystemException e) {
@@ -74,7 +73,7 @@ public class ParkingLotSystemUnitTest {
     public void givenVehicle_WhenParkingFull_ShouldThrowException() {
         try {
             when((parkingLot).isParkingFull()).thenReturn(true);
-            parkingLotSystem.parkVehicle(vehicle);
+            parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL);
         } catch (ParkingLotSystemException e) {
             Assert.assertEquals("Parking Is Full", e.getMessage());
         }
@@ -82,7 +81,7 @@ public class ParkingLotSystemUnitTest {
 
     @Test
     public void givenVehicle_WhenUnparkVehicle_ShouldReturnTrue() {
-        parkingLotSystem.parkVehicle(vehicle);
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL);
         when((parkingLot).isVehicleParked(vehicle)).thenReturn(true);
         boolean isUnparkVehicle = parkingLotSystem.unparkVehicle(vehicle);
         Assert.assertTrue(isUnparkVehicle);
@@ -92,7 +91,7 @@ public class ParkingLotSystemUnitTest {
     public void givenVehicleParkedAndAnotherVehicle_WhenUnparkVehicle_ShouldReturnException() {
         Object vehicle1 = new Object();
         try {
-            parkingLotSystem.parkVehicle(vehicle);
+            parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL);
             when((parkingLot).isVehicleParked(vehicle)).thenReturn(false);
             parkingLotSystem.unparkVehicle(vehicle1);
         } catch (ParkingLotSystemException e) {
@@ -105,7 +104,7 @@ public class ParkingLotSystemUnitTest {
     public void givenVehicle_WhenParkingFull_ShouldInformOwner() {
         ParkingOwner parkingOwner = mock(ParkingOwner.class);
         parkingLotSystem.subscribe(parkingOwner);
-        parkingLotSystem.parkVehicle(vehicle);
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL);
         when((parkingOwner).isParkingFull()).thenReturn(true);
         Assert.assertTrue(parkingOwner.isParkingFull());
     }
@@ -115,7 +114,7 @@ public class ParkingLotSystemUnitTest {
         ParkingOwner parkingOwner = mock(ParkingOwner.class);
         try {
             parkingLotSystem.subscribe(parkingOwner);
-            parkingLotSystem.parkVehicle(vehicle);
+            parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL);
             when((parkingLot).isParkingFull()).thenReturn(true);
         } catch (ParkingLotSystemException e) {
             Assert.assertEquals("Parking Is Full", e.getMessage());
@@ -127,7 +126,7 @@ public class ParkingLotSystemUnitTest {
         ParkingOwner parkingOwner = mock(ParkingOwner.class);
         parkingLotSystem.subscribe(parkingOwner);
         parkingLotSystem.unsubscribe(parkingOwner);
-        parkingLot.parkVehicle(vehicle);
+        parkingLot.parkVehicle(vehicle, DriverType.NORMAL);
         when((parkingOwner).isParkingFull()).thenReturn(true);
         Assert.assertTrue(parkingOwner.isParkingFull());
     }
@@ -135,10 +134,10 @@ public class ParkingLotSystemUnitTest {
     @Test
     public void givenCapacityIs2_ShouldBeAbleToPark2Vehicle() {
         Object vehicle1 = new Object();
-        parkingLotSystem.parkVehicle(vehicle);
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL);
         when((parkingLot).isVehicleParked(vehicle)).thenReturn(true);
         boolean isParked1 = parkingLot.isVehicleParked(vehicle);
-        parkingLot.parkVehicle(vehicle1);
+        parkingLot.parkVehicle(vehicle1, DriverType.NORMAL);
         when((parkingLot).isVehicleParked(vehicle1)).thenReturn(true);
         boolean isParked2 = parkingLot.isVehicleParked(vehicle1);
         Assert.assertTrue(isParked1 && isParked2);
@@ -148,9 +147,9 @@ public class ParkingLotSystemUnitTest {
     public void givenSameVehiclesTwoTimes_WhenParked_ShouldThrowException() {
         parkingLot.setCapacity(2);
         try {
-            parkingLot.parkVehicle(vehicle);
+            parkingLot.parkVehicle(vehicle, DriverType.NORMAL);
             when((parkingLot).isVehicleParked(vehicle)).thenThrow(new ParkingLotSystemException("Vehicle Already Parked", ParkingLotSystemException.ExceptionType.VEHICLE_ALREADY_PARKED));
-            parkingLot.parkVehicle(vehicle);
+            parkingLot.parkVehicle(vehicle, DriverType.NORMAL);
         } catch (ParkingLotSystemException e) {
             Assert.assertEquals("Vehicle Alraedy Parked", e.getMessage());
         }
@@ -161,7 +160,7 @@ public class ParkingLotSystemUnitTest {
     public void givenVehicle_WhenParkingLotFull_ShouldInformToAirportSecurity() {
         AirportSecurity airportSecurity = mock(AirportSecurity.class);
         parkingLotSystem.subscribe(airportSecurity);
-        parkingLot.parkVehicle(vehicle);
+        parkingLot.parkVehicle(vehicle, DriverType.NORMAL);
         when(airportSecurity.isParkingFull()).thenReturn(true);
         boolean parkingFull = airportSecurity.isParkingFull();
         Assert.assertTrue(parkingFull);
@@ -173,8 +172,8 @@ public class ParkingLotSystemUnitTest {
         ParkingOwner parkingOwner = mock(ParkingOwner.class);
         parkingLotSystem.subscribe(parkingOwner);
         try {
-            parkingLot.parkVehicle(new Object());
-            parkingLot.parkVehicle(new Object());
+            parkingLot.parkVehicle(new Object(), DriverType.NORMAL);
+            parkingLot.parkVehicle(new Object(), DriverType.NORMAL);
         } catch (ParkingLotSystemException e) {
             when(parkingOwner.isParkingFull()).thenReturn(false);
             boolean parkingAvailable = parkingOwner.isParkingFull();
@@ -187,7 +186,7 @@ public class ParkingLotSystemUnitTest {
     public void givenVehicle_WhenSpaceIsAvailable_ShouldInformToAirportSecurity() {
         AirportSecurity airportSecurity = mock(AirportSecurity.class);
         parkingLotSystem.subscribe(airportSecurity);
-        parkingLotSystem.parkVehicle(vehicle);
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL);
         when(airportSecurity.isParkingFull()).thenReturn(false);
         boolean parkingAvailable = airportSecurity.isParkingFull();
         Assert.assertFalse(parkingAvailable);
@@ -201,7 +200,7 @@ public class ParkingLotSystemUnitTest {
         AirportSecurity airportSecurity = mock(AirportSecurity.class);
         parkingLotSystem.subscribe(parkingOwner);
         parkingLotSystem.subscribe(airportSecurity);
-        parkingLot.parkVehicle(vehicle);
+        parkingLot.parkVehicle(vehicle, DriverType.NORMAL);
         when(parkingOwner.isParkingFull()).thenReturn(false);
         when(airportSecurity.isParkingFull()).thenReturn(false);
         boolean parkingAvailable1 = parkingOwner.isParkingFull();

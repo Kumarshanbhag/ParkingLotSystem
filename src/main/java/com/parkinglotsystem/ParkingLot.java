@@ -1,16 +1,19 @@
 package com.parkinglotsystem;
 
+import com.parkinglotsystem.enums.DriverType;
 import com.parkinglotsystem.exception.ParkingLotSystemException;
 import com.parkinglotsystem.model.ParkingSlot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ParkingLot {
     private int parkingCapacity;
     private List<ParkingSlot> vehiclesList;
     private ParkingSlot parkingSlot;
+    private int emptyParkingSlot;
 
     public ParkingLot(int parkingCapacity) {
         setCapacity(parkingCapacity);
@@ -51,14 +54,22 @@ public class ParkingLot {
     /**
      * Purpose: To Park Vehicle in ParkingLot And Inform Parking Full
      * @param vehicle To Park in ParkingLot
+     * @param driverType
      */
-    public void parkVehicle(Object vehicle) {
+    public void parkVehicle(Object vehicle, DriverType driverType) {
         if (isVehicleParked(vehicle)) {
             throw new ParkingLotSystemException("Vehicle Already Parked", ParkingLotSystemException.ExceptionType.VEHICLE_ALREADY_PARKED);
         }
         parkingSlot = new ParkingSlot(vehicle);
-        int emptyParkingSlot = getListOfEmptyParkingSlots().get(0);
+        emptyParkingSlot = getEmptyParkingSlotListBasedOnDriverType(driverType);
         this.vehiclesList.set(emptyParkingSlot, parkingSlot);
+    }
+
+    private Integer getEmptyParkingSlotListBasedOnDriverType(DriverType driverType) {
+        List<Integer> emptySlots = getListOfEmptyParkingSlots().stream()
+                .sorted(driverType.order)
+                .collect(Collectors.toList());
+        return emptySlots.get(0);
     }
 
     /**

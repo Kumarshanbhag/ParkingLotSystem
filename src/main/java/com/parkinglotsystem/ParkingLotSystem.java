@@ -6,6 +6,7 @@
 
 package com.parkinglotsystem;
 
+import com.parkinglotsystem.enums.DriverType;
 import com.parkinglotsystem.exception.ParkingLotSystemException;
 import com.parkinglotsystem.observer.InformObserver;
 import com.parkinglotsystem.observer.ParkingLotSubscriber;
@@ -49,13 +50,14 @@ public class ParkingLotSystem {
     /**
      * Purpose: To Park Vehicle in ParkingLot And Inform Parking Full
      * @param vehicle To Park in ParkingLot
+     * @param driverType
      */
-    public void parkVehicle(Object vehicle) {
+    public void parkVehicle(Object vehicle, DriverType driverType) {
         parkingLot = getParkingLotHavingMaxSpace();
         if (parkingLot.isParkingFull()) {
             throw new ParkingLotSystemException("Parking Is Full", ParkingLotSystemException.ExceptionType.PARKING_FULL);
         }
-        parkingLot.parkVehicle(vehicle);
+        parkingLot.parkVehicle(vehicle, driverType);
         if (parkingLot.isParkingFull()) {
             informObserver.parkingFull();
         }
