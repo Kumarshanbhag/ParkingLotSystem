@@ -1,8 +1,8 @@
-/*****************************************************************
- * @Purpose: To
+/**********************************************************************************************
+ * @Purpose: To inform About Parking Full, Available And Vehicle Parking Time To Subscriber
  * @Author: Kumar Shanbhag
  * @Date: 22/05/2020
- ****************************************************************/
+ **********************************************************************************************/
 package com.parkinglotsystem.observer;
 
 import java.util.ArrayList;

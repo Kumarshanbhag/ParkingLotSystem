@@ -19,14 +19,6 @@ public class ParkingSlot {
         this.time = (int) TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis());
     }
 
-    /**
-     * Purpose: To Set Slot For Parking Vehicle
-     * @param slot
-     */
-    public void setSlot(Integer slot) {
-        this.slot = slot;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
