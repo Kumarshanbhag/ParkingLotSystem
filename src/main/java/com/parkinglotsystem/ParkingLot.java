@@ -144,7 +144,15 @@ public class ParkingLot {
                 .map(parkingSlot -> parkingSlot.getLocation())
                 .collect(Collectors.toList());
         return vehicleListByColor;
+    }
 
-
+    public List<String> findByColorAndModel(String color, String model) {
+        List<String> vehicleListByColorAndModel = this.vehiclesList.stream()
+                .filter(parkingSlot -> parkingSlot.getVehicle() != null)
+                .filter(parkingSlot -> parkingSlot.getVehicle().getColor().equals(color))
+                .filter(parkingSlot -> parkingSlot.getVehicle().getModel().equals(model))
+                .map(parkingSlot -> parkingSlot.getLocation() + " " + parkingSlot.getVehicle())
+                .collect(Collectors.toList());
+        return vehicleListByColorAndModel;
     }
 }
