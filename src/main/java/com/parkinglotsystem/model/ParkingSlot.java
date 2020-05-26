@@ -11,12 +11,21 @@ import java.util.concurrent.TimeUnit;
 
 public class ParkingSlot {
     public int time;
-    public Object vehicle;
+    public Vehicle vehicle;
     private Integer slot;
 
-    public ParkingSlot(Object vehicle) {
+    public ParkingSlot(Vehicle vehicle, int slot) {
         this.vehicle = vehicle;
         this.time = (int) TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis());
+        this.slot = slot;
+    }
+
+    public int getLocation() {
+        return this.slot;
+    }
+
+    public Vehicle getVehicle() {
+        return this.vehicle;
     }
 
     @Override

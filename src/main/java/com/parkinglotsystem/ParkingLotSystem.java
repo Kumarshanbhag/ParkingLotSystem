@@ -9,6 +9,7 @@ package com.parkinglotsystem;
 import com.parkinglotsystem.enums.DriverType;
 import com.parkinglotsystem.enums.VehicleSize;
 import com.parkinglotsystem.exception.ParkingLotSystemException;
+import com.parkinglotsystem.model.Vehicle;
 import com.parkinglotsystem.observer.InformObserver;
 import com.parkinglotsystem.observer.ParkingLotSubscriber;
 
@@ -54,7 +55,7 @@ public class ParkingLotSystem {
      * @param driverType
      * @param vehicleSize
      */
-    public void parkVehicle(Object vehicle, DriverType driverType, VehicleSize vehicleSize) {
+    public void parkVehicle(Vehicle vehicle, DriverType driverType, VehicleSize vehicleSize) {
         parkingLot = getParkingLotHavingMaxSpace();
         if (parkingLot.isParkingFull()) {
             throw new ParkingLotSystemException("Parking Is Full", ParkingLotSystemException.ExceptionType.PARKING_FULL);
@@ -70,7 +71,7 @@ public class ParkingLotSystem {
      * @param vehicle is Parked Or Not
      * @return true if Vehicle Parked Or Throw Exception
      */
-    public boolean isVehicleParked(Object vehicle) {
+    public boolean isVehicleParked(Vehicle vehicle) {
         for (ParkingLot parkingLot : this.parkingLotList) {
             if (parkingLot.isVehicleParked(vehicle))
                 return true;
@@ -83,7 +84,7 @@ public class ParkingLotSystem {
      * @param vehicle To Unpark From ParkingLot
      * @return true if Vehicle Unparked Or Throw Exception
      */
-    public boolean unparkVehicle(Object vehicle) {
+    public boolean unparkVehicle(Vehicle vehicle) {
         for (ParkingLot parkingLot : this.parkingLotList) {
             if (parkingLot.isVehicleParked(vehicle)) {
                 parkingLot.unparkVehicle(vehicle);
@@ -109,7 +110,7 @@ public class ParkingLotSystem {
      * @param vehicle To Find In Parking Lot
      * @return slot if Vehicle Found Or Throw Exception
      */
-    public int findVehicle(Object vehicle) {
+    public int findVehicle(Vehicle vehicle) {
         for (ParkingLot parkingLot : parkingLotList)
             if (parkingLot.isVehicleParked(vehicle))
                 return parkingLot.findVehicle(vehicle);
@@ -121,7 +122,7 @@ public class ParkingLotSystem {
      * @param vehicle Whose Time To Return
      * @return time If Vehcile Found Or Throw Exception
      */
-    public void getVehicleParkingTime(Object vehicle) {
+    public void getVehicleParkingTime(Vehicle vehicle) {
         for (ParkingLot parkingLot : this.parkingLotList)
             if (parkingLot.isVehicleParked(vehicle)) {
                 informObserver.setParkingTime(parkingLot.getVehicleParkingTime(vehicle));
@@ -144,5 +145,12 @@ public class ParkingLotSystem {
      */
     public void unsubscribe(ParkingLotSubscriber subscriber) {
         informObserver.unsubscribeParkingLotObserver(subscriber);
+    }
+
+    public List<List<Integer>> findVehicleByColor(String color) {
+        List<List<Integer>> vehicleListByColor = this.parkingLotList.stream()
+                .map(parkingSlot -> parkingLot.findByColor(color))
+                .collect(Collectors.toList());
+        return vehicleListByColor;
     }
 }

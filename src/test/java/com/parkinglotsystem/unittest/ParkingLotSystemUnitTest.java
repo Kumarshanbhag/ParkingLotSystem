@@ -7,22 +7,26 @@ import com.parkinglotsystem.enums.VehicleSize;
 import com.parkinglotsystem.exception.ParkingLotSystemException;
 import com.parkinglotsystem.model.AirportSecurity;
 import com.parkinglotsystem.model.ParkingOwner;
+import com.parkinglotsystem.model.Vehicle;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ParkingLotSystemUnitTest {
     private ParkingLot parkingLot;
-    static Object vehicle;
+    static Vehicle vehicle;
     private ParkingLotSystem parkingLotSystem;
 
     @Before
     public void setUp() throws Exception {
         parkingLot = mock(ParkingLot.class);
-        vehicle = new Object();
+        vehicle = new Vehicle("WHITE");
         parkingLotSystem = new ParkingLotSystem();
         parkingLotSystem.addLot(parkingLot);
     }
@@ -90,7 +94,7 @@ public class ParkingLotSystemUnitTest {
 
     @Test
     public void givenVehicleParkedAndAnotherVehicle_WhenUnparkVehicle_ShouldReturnException() {
-        Object vehicle1 = new Object();
+        Vehicle vehicle1 = new Vehicle("WHITE");
         try {
             parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
             when((parkingLot).isVehicleParked(vehicle)).thenReturn(false);
@@ -134,7 +138,7 @@ public class ParkingLotSystemUnitTest {
 
     @Test
     public void givenCapacityIs2_ShouldBeAbleToPark2Vehicle() {
-        Object vehicle1 = new Object();
+        Vehicle vehicle1 = new Vehicle("WHITE");
         parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
         when((parkingLot).isVehicleParked(vehicle)).thenReturn(true);
         boolean isParked1 = parkingLot.isVehicleParked(vehicle);
@@ -173,8 +177,8 @@ public class ParkingLotSystemUnitTest {
         ParkingOwner parkingOwner = mock(ParkingOwner.class);
         parkingLotSystem.subscribe(parkingOwner);
         try {
-            parkingLot.parkVehicle(new Object(), DriverType.NORMAL, VehicleSize.LARGE);
-            parkingLot.parkVehicle(new Object(), DriverType.NORMAL, VehicleSize.SMALL);
+            parkingLot.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.LARGE);
+            parkingLot.parkVehicle(new Vehicle("WHITE"), DriverType.NORMAL, VehicleSize.SMALL);
         } catch (ParkingLotSystemException e) {
             when(parkingOwner.isParkingFull()).thenReturn(false);
             boolean parkingAvailable = parkingOwner.isParkingFull();
@@ -248,5 +252,22 @@ public class ParkingLotSystemUnitTest {
         } catch (ParkingLotSystemException e) {
             Assert.assertEquals("Vehicle Is Not Available", e.getMessage());
         }
+    }
+
+    @Test
+    public void givenWhiteCarToPark_whenParkingLotToParkVehicle_shouldReturnLocationOfAllWhiteCars() {
+        List<List<Integer>> expectedList = new ArrayList<>();
+        List<Integer> lot1 = new ArrayList<>();
+        lot1.add(0);
+        expectedList.add(lot1);
+        parkingLot.setCapacity(2);
+        Vehicle vehicle1 = new Vehicle("BLUE");
+        when(parkingLot.isVehicleParked(vehicle)).thenReturn(true);
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        when(parkingLot.isVehicleParked(vehicle1)).thenReturn(true);
+        parkingLotSystem.parkVehicle(vehicle1, DriverType.NORMAL, VehicleSize.SMALL);
+        when(parkingLot.findByColor("WHITE")).thenReturn(lot1);
+        List<List<Integer>> vehicleByColor = parkingLotSystem.findVehicleByColor("WHITE");
+        Assert.assertEquals(expectedList, vehicleByColor);
     }
 }
