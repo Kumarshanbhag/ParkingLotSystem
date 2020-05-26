@@ -1,12 +1,13 @@
-/*****************************************************************
- * @Purpose: To Park, Unpark And Inform Parking Full To Observers
+/***************************************************************************
+ * @Purpose: To Park, Unpark And Inform Parking Availability To Observers
  * @Author: Kumar Shanbhag
  * @Date: 22/05/2020
- ****************************************************************/
+ ****************************************************************************/
 
 package com.parkinglotsystem;
 
 import com.parkinglotsystem.enums.DriverType;
+import com.parkinglotsystem.enums.VehicleSize;
 import com.parkinglotsystem.exception.ParkingLotSystemException;
 import com.parkinglotsystem.observer.InformObserver;
 import com.parkinglotsystem.observer.ParkingLotSubscriber;
@@ -51,13 +52,14 @@ public class ParkingLotSystem {
      * Purpose: To Park Vehicle in ParkingLot And Inform Parking Full
      * @param vehicle To Park in ParkingLot
      * @param driverType
+     * @param vehicleSize
      */
-    public void parkVehicle(Object vehicle, DriverType driverType) {
+    public void parkVehicle(Object vehicle, DriverType driverType, VehicleSize vehicleSize) {
         parkingLot = getParkingLotHavingMaxSpace();
         if (parkingLot.isParkingFull()) {
             throw new ParkingLotSystemException("Parking Is Full", ParkingLotSystemException.ExceptionType.PARKING_FULL);
         }
-        parkingLot.parkVehicle(vehicle, driverType);
+        parkingLot.parkVehicle(vehicle, driverType, vehicleSize);
         if (parkingLot.isParkingFull()) {
             informObserver.parkingFull();
         }

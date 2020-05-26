@@ -1,6 +1,12 @@
+/*****************************************************************
+ * @Purpose: To Park And Unpark And Vehicles On Different Slots
+ * @Author: Kumar Shanbhag
+ * @Date: 25/05/2020
+ ****************************************************************/
 package com.parkinglotsystem;
 
 import com.parkinglotsystem.enums.DriverType;
+import com.parkinglotsystem.enums.VehicleSize;
 import com.parkinglotsystem.exception.ParkingLotSystemException;
 import com.parkinglotsystem.model.ParkingSlot;
 
@@ -55,8 +61,9 @@ public class ParkingLot {
      * Purpose: To Park Vehicle in ParkingLot And Inform Parking Full
      * @param vehicle To Park in ParkingLot
      * @param driverType
+     * @param vehicleSize
      */
-    public void parkVehicle(Object vehicle, DriverType driverType) {
+    public void parkVehicle(Object vehicle, DriverType driverType, VehicleSize vehicleSize) {
         if (isVehicleParked(vehicle)) {
             throw new ParkingLotSystemException("Vehicle Already Parked", ParkingLotSystemException.ExceptionType.VEHICLE_ALREADY_PARKED);
         }
@@ -65,6 +72,11 @@ public class ParkingLot {
         this.vehiclesList.set(emptyParkingSlot, parkingSlot);
     }
 
+    /**
+     * Purpose: To Get Slot Based On Driver Type
+     * @param driverType Normal Or Handicap
+     * @return slot To Park Vehicle
+     */
     private Integer getEmptyParkingSlotListBasedOnDriverType(DriverType driverType) {
         List<Integer> emptySlots = getListOfEmptyParkingSlots().stream()
                 .sorted(driverType.order)
