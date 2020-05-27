@@ -280,7 +280,22 @@ public class ParkingLotSystemUnitTest {
         Vehicle vehicle1 = new Vehicle("BLUE", "TOYOTA", "MH-12-1234", "Kumar");
         parkingLotSystem.parkVehicle(vehicle1, DriverType.NORMAL, VehicleSize.SMALL);
         when(parkingLot.findByColorAndModel("BLUE", "TOYOTA")).thenReturn(carList);
-        List<List<String>> vehicleList = parkingLotSystem.findByColorAndModel("BLUE", "TOYOTA");
+        List<List<String>> vehicleList = parkingLotSystem.findVehicleByColorAndModel("BLUE", "TOYOTA");
         Assert.assertEquals(expectedList, vehicleList);
+    }
+
+    @Test
+    public void givenBMWCarToPark_WhenParkingLotToParkVehicle_ShouldReturnLocationOfAllBMWCars() {
+        List<List<String>> expectedList = new ArrayList<>();
+        List<String> lot1 = new ArrayList<>();
+        lot1.add("1 Vehicle{color='WHITE', model='BMW', numberPlate='MH-12-1234', attender='Kumar'}");
+        expectedList.add(lot1);
+
+        parkingLot.setCapacity(2);
+        Vehicle vehicle = new Vehicle("WHITE", "BMW", "MH-12-1234", "Kumar");
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        when(parkingLot.findByModel("BMW")).thenReturn(lot1);
+        List<List<String>> vehicleByColor = parkingLotSystem.findVehicleByModel("BMW");
+        Assert.assertEquals(expectedList, vehicleByColor);
     }
 }

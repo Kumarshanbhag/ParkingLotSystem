@@ -20,10 +20,18 @@ public class ParkingSlot {
         this.slot = slot;
     }
 
+    /**
+     * Purpose: To Return Vehicle Slot
+     * @return slotNumber
+     */
     public int getLocation() {
         return this.slot;
     }
 
+    /**
+     * Purpose: To Return Vehicle Object
+     * @return vehicle parked in specific slot
+     */
     public Vehicle getVehicle() {
         return this.vehicle;
     }

@@ -1,3 +1,8 @@
+/**********************************************************************************
+ * @Purpose: To Store Properties Of Vehicle(Color, Model, NumberPlate, Attender)
+ * @Author: Kumar Shanbhag
+ * @Date: 23/05/2020
+ **********************************************************************************/
 package com.parkinglotsystem.model;
 
 public class Vehicle {
@@ -13,10 +18,18 @@ public class Vehicle {
         this.attender = attender;
     }
 
+    /**
+     * Purpose: To Return Vehicle Color
+     * @return Color Of Vehicle
+     */
     public String getColor() {
         return this.color;
     }
 
+    /**
+     * Purpose: To Return Vehicle Model
+     * @return Model Of Vehicle
+     */
     public String getModel() {
         return this.model;
     }

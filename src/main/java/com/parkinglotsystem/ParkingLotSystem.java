@@ -147,6 +147,11 @@ public class ParkingLotSystem {
         informObserver.unsubscribeParkingLotObserver(subscriber);
     }
 
+    /**
+     * Purpose: To Find Vehicle Based On Vehicle Color
+     * @param color Of Vehicle To Find
+     * @return List Of Vehicle With Same Color
+     */
     public List<List<Integer>> findVehicleByColor(String color) {
         List<List<Integer>> vehicleListByColor = this.parkingLotList.stream()
                 .map(parkingLot -> parkingLot.findByColor(color))
@@ -154,12 +159,28 @@ public class ParkingLotSystem {
         return vehicleListByColor;
     }
 
-    public List<List<String>> findByColorAndModel(String color, String model) {
-        List<List<String>> vehicleListByColorAndModel = new ArrayList<>();
-        for (ParkingLot lot : this.parkingLotList) {
-            List<String> byColorAndModel = lot.findByColorAndModel(color, model);
-            vehicleListByColorAndModel.add(byColorAndModel);
-        }
+    /**
+     * Purpose: To Find Vehicle Based On Vehicle Color And Model
+     * @param color Of Vehicle To Find
+     * @param model Of Vehicle To Find
+     * @return List Of Vehicle With Same Color And Model
+     */
+    public List<List<String>> findVehicleByColorAndModel(String color, String model) {
+        List<List<String>> vehicleListByColorAndModel = this.parkingLotList.stream()
+                .map(parkingLot -> parkingLot.findByColorAndModel(color, model))
+                .collect(Collectors.toList());
         return vehicleListByColorAndModel;
+    }
+
+    /**
+     * Purpose: To Find Vehicle Based On Vehicle Color And Model
+     * @param model Of Vehicle To Find
+     * @return List Of Vehicle With Same Model
+     */
+    public List<List<String>> findVehicleByModel(String model) {
+        List<List<String>> vehicleListByColor = this.parkingLotList.stream()
+                .map(parkingLot -> parkingLot.findByModel(model))
+                .collect(Collectors.toList());
+        return vehicleListByColor;
     }
 }

@@ -137,22 +137,48 @@ public class ParkingLot {
         return false;
     }
 
+    /**
+     * Purpose: To Find Vehicle Based On Vehicle Color
+     * @param color Of Vehicle To Find
+     * @return List Of Vehicle With Same Color
+     */
+
     public List<Integer> findByColor(String color) {
         List<Integer> vehicleListByColor = this.vehiclesList.stream()
                 .filter(parkingSlot -> parkingSlot.getVehicle() != null)
-                .filter(parkingSlot -> parkingSlot.getVehicle().getColor().equals(color))
+                .filter(parkingSlot -> parkingSlot.getVehicle().getColor().equalsIgnoreCase(color))
                 .map(parkingSlot -> parkingSlot.getLocation())
                 .collect(Collectors.toList());
         return vehicleListByColor;
     }
 
+    /**
+     * Purpose: To Find Vehicle Based On Vehicle Color And Model
+     * @param color Of Vehicle To Find
+     * @param model Of Vehicle To Find
+     * @return List Of Vehicle With Same Color And Model
+     */
     public List<String> findByColorAndModel(String color, String model) {
         List<String> vehicleListByColorAndModel = this.vehiclesList.stream()
                 .filter(parkingSlot -> parkingSlot.getVehicle() != null)
-                .filter(parkingSlot -> parkingSlot.getVehicle().getColor().equals(color))
-                .filter(parkingSlot -> parkingSlot.getVehicle().getModel().equals(model))
+                .filter(parkingSlot -> parkingSlot.getVehicle().getColor().equalsIgnoreCase(color))
+                .filter(parkingSlot -> parkingSlot.getVehicle().getModel().equalsIgnoreCase(model))
                 .map(parkingSlot -> parkingSlot.getLocation() + " " + parkingSlot.getVehicle())
                 .collect(Collectors.toList());
         return vehicleListByColorAndModel;
+    }
+
+    /**
+     * Purpose: To Find Vehicle Based On Vehicle Color And Model
+     * @param model Of Vehicle To Find
+     * @return List Of Vehicle With Same Model
+     */
+    public List<String> findByModel(String model) {
+        List<String> vehicleListByModel = this.vehiclesList.stream()
+                .filter(parkingSlot -> parkingSlot.getVehicle() != null)
+                .filter(parkingSlot -> parkingSlot.getVehicle().getModel().equalsIgnoreCase(model))
+                .map(parkingSlot -> parkingSlot.getLocation() + " " + parkingSlot.getVehicle())
+                .collect(Collectors.toList());
+        return vehicleListByModel;
     }
 }
