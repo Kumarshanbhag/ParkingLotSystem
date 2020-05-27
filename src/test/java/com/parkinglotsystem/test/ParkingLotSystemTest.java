@@ -645,4 +645,73 @@ public class ParkingLotSystemTest {
         List<List<String>> vehicleByColor = parkingLotSystem.findVehicleByModel("BMW");
         Assert.assertEquals(expectedList, vehicleByColor);
     }
+
+    //UC15
+    @Test
+    public void givenCarToPark_WhenParkingLotToParkVehicle_ShouldReturnLocationOfAllCarsParkedWithin30Miutes() {
+        List<List<String>> expectedList = new ArrayList<>();
+        List<String> lot1 = new ArrayList<>();
+        lot1.add("0 Vehicle{color='WHITE', model='TOYOTA', numberPlate='MH-12-1234', attender='Kumar'}");
+        lot1.add("1 Vehicle{color='WHITE', model='BMW', numberPlate='MH-12-1234', attender='Kumar'}");
+        expectedList.add(lot1);
+
+        parkingLot.setCapacity(2);
+        Vehicle vehicle = new Vehicle("WHITE", "BMW", "MH-12-1234", "Kumar");
+        Vehicle vehicle2 = new Vehicle("WHITE", "TOYOTA", "MH-12-1234", "Kumar");
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        parkingLotSystem.parkVehicle(vehicle2, DriverType.NORMAL, VehicleSize.SMALL);
+        List<List<String>> vehicleByTime = parkingLotSystem.findVehicleByTime(30);
+        Assert.assertEquals(expectedList, vehicleByTime);
+    }
+
+    @Test
+    public void givenCarToPark_WhenParkingLotToParkVehicle_ShouldReturnLocationOfAllCarsParkedWithin10Miutes() {
+        List<List<String>> expectedList = new ArrayList<>();
+        List<String> lot1 = new ArrayList<>();
+        lot1.add("0 Vehicle{color='WHITE', model='TOYOTA', numberPlate='MH-12-1234', attender='Kumar'}");
+        lot1.add("1 Vehicle{color='WHITE', model='BMW', numberPlate='MH-12-1234', attender='Kumar'}");
+        expectedList.add(lot1);
+
+        parkingLot.setCapacity(2);
+        Vehicle vehicle = new Vehicle("WHITE", "BMW", "MH-12-1234", "Kumar");
+        Vehicle vehicle2 = new Vehicle("WHITE", "TOYOTA", "MH-12-1234", "Kumar");
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        parkingLotSystem.parkVehicle(vehicle2, DriverType.NORMAL, VehicleSize.SMALL);
+        List<List<String>> vehicleByTime = parkingLotSystem.findVehicleByTime(10);
+        Assert.assertEquals(expectedList, vehicleByTime);
+    }
+
+    @Test
+    public void givenCarToPark_WhenParkingLotToParkVehicle_ShouldReturnEmptyListWhenTimIslessThan0Mins() {
+        List<List<Integer>> expectedList = new ArrayList<>();
+        List<Integer> lot1 = new ArrayList<>();
+        expectedList.add(lot1);
+        parkingLot.setCapacity(2);
+        Vehicle vehicle = new Vehicle("BLACK", "TOYOTA", "MH-12-1234", "Kumar");
+        Vehicle vehicle2 = new Vehicle("WHITE", "TOYOTA", "MH-12-1234", "Kumar");
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        parkingLotSystem.parkVehicle(vehicle2, DriverType.NORMAL, VehicleSize.SMALL);
+        List<List<String>> vehicleByTime = parkingLotSystem.findVehicleByModel("0");
+        Assert.assertEquals(expectedList, vehicleByTime);
+    }
+
+    @Test
+    public void givenCarToPark_WhenMultipleParkingLotToParkVehicle_ShouldReturnLocationOfAllCarsParkedWithin10Miutes() {
+        List<List<String>> expectedList = new ArrayList<>();
+        List<String> lot1 = new ArrayList<>();
+        List<String> lot2 = new ArrayList<>();
+        lot1.add("0 Vehicle{color='BLUE', model='BMW', numberPlate='MH-12-1234', attender='Kumar'}");
+        lot2.add("0 Vehicle{color='BLACK', model='BMW', numberPlate='MH-12-1234', attender='Kumar'}");
+        expectedList.add(lot1);
+        expectedList.add(lot2);
+
+        ParkingLot parkingLot2 = new ParkingLot(1);
+        parkingLotSystem.addLot(parkingLot2);
+        Vehicle vehicle = new Vehicle("BLUE", "BMW", "MH-12-1234", "Kumar");
+        Vehicle vehicle2 = new Vehicle("BLACK", "BMW", "MH-12-1234", "Kumar");
+        parkingLotSystem.parkVehicle(vehicle, DriverType.NORMAL, VehicleSize.SMALL);
+        parkingLotSystem.parkVehicle(vehicle2, DriverType.NORMAL, VehicleSize.SMALL);
+        List<List<String>> vehicleByTime = parkingLotSystem.findVehicleByTime(30);
+        Assert.assertEquals(expectedList, vehicleByTime);
+    }
 }
