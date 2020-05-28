@@ -184,9 +184,28 @@ public class ParkingLotSystem {
         return vehicleListByColor;
     }
 
+    /**
+     * Purpose: To Find Vehicle Based On Vehicle Parked Time
+     * @param parkedTime of Vehicle Parked
+     * @return List Of Vehicle Parked Within Given Time
+     */
     public List<List<String>> findVehicleByTime(int parkedTime) {
         List<List<String>> vehicleListByColor = this.parkingLotList.stream()
                 .map(parkingLot -> parkingLot.findByTime(parkedTime))
+                .collect(Collectors.toList());
+        return vehicleListByColor;
+    }
+
+    /**
+     * Purpose: To Find Vehicle Based On Vehicle Size, DriverType And Slot at Which It Is Parked
+     * @param vehicleSize To Match Size(Small, Large)
+     * @param driverType To Match DriverType(Normal, Handicap)
+     * @param slot To Check Vehicle Is At Present At Desired Slot
+     * @return List Of Vehicle With Same VehiceSize, DriverType And Slot
+     */
+    public List<List<String>> findVehicleBySizeDriverAndSlot(VehicleSize vehicleSize, DriverType driverType, int slot) {
+        List<List<String>> vehicleListByColor = this.parkingLotList.stream()
+                .map(parkingLot -> parkingLot.findBySizeDriverAndSlot(vehicleSize, driverType, slot))
                 .collect(Collectors.toList());
         return vehicleListByColor;
     }

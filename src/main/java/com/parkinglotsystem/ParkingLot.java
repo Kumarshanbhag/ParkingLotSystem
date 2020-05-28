@@ -70,7 +70,7 @@ public class ParkingLot {
             throw new ParkingLotSystemException("Vehicle Already Parked", ParkingLotSystemException.ExceptionType.VEHICLE_ALREADY_PARKED);
         }
         emptyParkingSlot = getEmptyParkingSlotListBasedOnDriverType(driverType);
-        parkingSlot = new ParkingSlot(vehicle, emptyParkingSlot);
+        parkingSlot = new ParkingSlot(vehicle, emptyParkingSlot, vehicleSize, driverType);
         this.vehiclesList.set(emptyParkingSlot, parkingSlot);
     }
 
@@ -92,9 +92,12 @@ public class ParkingLot {
      * @return true if Vehicle Parked Or Return False
      */
     public boolean isVehicleParked(Vehicle vehicle) {
-        parkingSlot = new ParkingSlot(vehicle, emptyParkingSlot);
-        if (vehiclesList.contains(parkingSlot))
+        VehicleSize vehicleSize = null;
+        DriverType driverType = null;
+        parkingSlot = new ParkingSlot(vehicle, emptyParkingSlot, vehicleSize, driverType);
+        if (vehiclesList.contains(parkingSlot)) {
             return true;
+        }
         return false;
     }
 
@@ -183,10 +186,33 @@ public class ParkingLot {
         return vehicleListByModel;
     }
 
+    /**
+     * Purpose: To Find Vehicle Based On Vehicle Parked Time
+     * @param parkedTime of Vehicle Parked
+     * @return List Of Vehicle Parked Within Given Time
+     */
     public List<String> findByTime(int parkedTime) {
         List<String> vehicleListByTime = this.vehiclesList.stream()
                 .filter(parkingSlot -> parkingSlot.getVehicle() != null)
                 .filter(parkingSlot -> (parkingSlot.time - (int) TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis())) < parkedTime)
+                .map(parkingSlot -> parkingSlot.getLocation() + " " + parkingSlot.getVehicle())
+                .collect(Collectors.toList());
+        return vehicleListByTime;
+    }
+
+    /**
+     * Purpose: To Find Vehicle Based On Vehicle Size, DriverType And Slot at Which It Is Parked
+     * @param vehicleSize To Match Size(Small, Large)
+     * @param driverType To Match DriverType(Normal, Handicap)
+     * @param slot To Check Vehicle Is At Present At Desired Slot
+     * @return List Of Vehicle With Same VehiceSize, DriverType And Slot
+     */
+    public List<String> findBySizeDriverAndSlot(VehicleSize vehicleSize, DriverType driverType, int slot) {
+        List<String> vehicleListByTime = this.vehiclesList.stream()
+                .filter(parkingSlot -> parkingSlot.getVehicle() != null)
+                .filter(parkingSlot -> parkingSlot.vehicleSize.equals(vehicleSize))
+                .filter(parkingSlot -> parkingSlot.driverType.equals(driverType))
+                .filter(parkingSlot -> parkingSlot.getLocation() == slot )
                 .map(parkingSlot -> parkingSlot.getLocation() + " " + parkingSlot.getVehicle())
                 .collect(Collectors.toList());
         return vehicleListByTime;
