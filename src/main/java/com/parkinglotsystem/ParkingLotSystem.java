@@ -209,4 +209,15 @@ public class ParkingLotSystem {
                 .collect(Collectors.toList());
         return vehicleListByColor;
     }
+
+    /**
+     * Purpose: To Find All Parked Vehicle
+     * @return List Of Vehicle
+     */
+    public List<List<String>> findAllVehicle() {
+        List<List<String>> allVehicleList = this.parkingLotList.stream()
+                .map(parkingLot -> parkingLot.findAllVehicle())
+                .collect(Collectors.toList());
+        return allVehicleList;
+    }
 }

@@ -217,4 +217,16 @@ public class ParkingLot {
                 .collect(Collectors.toList());
         return vehicleListByTime;
     }
+
+    /**
+     * Purpose: To Find All Parked Vehicle
+     * @return List Of Vehicle
+     */
+    public List<String> findAllVehicle() {
+        List<String> allVehicleList = this.vehiclesList.stream()
+                .filter(parkingSlot -> parkingSlot.getVehicle() != null)
+                .map(parkingSlot -> parkingSlot.getLocation() + " " + parkingSlot.getVehicle())
+                .collect(Collectors.toList());
+        return allVehicleList;
+    }
 }
